@@ -19,7 +19,6 @@ export class AuthGuards extends AuthGuard('jwt') {
 
     const token = this.extractTokenFromHeader(authHeader);
     ctx.user = await this.validateToken(token);
-    console.log(ctx.user)
     
     return true;
   }
@@ -35,7 +34,6 @@ export class AuthGuards extends AuthGuard('jwt') {
     try {
       return await this.jwtService.verifyAsync(token);
     } catch (err) {
-        console.log(err)
       throw new UnauthorizedException('Invalid token');
     }
   }

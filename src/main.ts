@@ -8,7 +8,7 @@ async function bootstrap() {
   app.enableCors({
     // methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: '*',
-    origin: ['http://localhost:3001'],
+    origin: ['http://localhost:3001', 'https://image-hub-frontend.vercel.app'],
     credentials: true,
   });
   app.use(graphqlUploadExpress({maxFileSize: 1000000, maxFiles: 10 }));
