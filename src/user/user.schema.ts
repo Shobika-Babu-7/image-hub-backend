@@ -5,6 +5,9 @@ export const UserSchema = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  accessToken: { type: String, unique: true },
+  secret: { type: String },
+  authEnabled: { type: Boolean, default: false },
 });
 
 UserSchema.pre('save', async function (next) {

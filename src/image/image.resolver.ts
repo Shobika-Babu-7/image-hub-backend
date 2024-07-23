@@ -15,12 +15,16 @@ import { GraphQLUpload, FileUpload } from 'graphql-upload';
 
 @Resolver(of => ImageModel)
 export class ImageResolver {
-  constructor(private imageService: ImageService, private awsS3Service: AwsS3Service) {}
+  constructor(private imageService: ImageService, private awsS3Service: AwsS3Service) { }
 
   @Query(() => [ImageModel])
   @UseGuards(AuthGuards)
-  async getAllMyUploadedPictures(@Args('user') user: string) {
-    return this.imageService.findAll(user);
+  async getAllMyUploadedPictures(@Args('user') user: string): Promise<Image[] | Error> {
+    try {
+      return this.imageService.findAll(user);
+    } catch (error) {
+      throw new Error('Failed to fetch images');
+    }
   }
 
   @UseGuards(AuthGuards)
@@ -32,8 +36,8 @@ export class ImageResolver {
     const { createReadStream, filename, mimetype } = await file;
     const stream = createReadStream();
     let location = await this.awsS3Service.uploadFile(stream, filename)
-    let imageData: CreateImageDto = {image: location, mimeType: mimetype, user: req.user._id}
-    return this.imageService.createImage(imageData); 
+    let imageData: CreateImageDto = { image: location, mimeType: mimetype, user: req.user._id }
+    return this.imageService.createImage(imageData);
   }
 
   @UseGuards(AuthGuards)
